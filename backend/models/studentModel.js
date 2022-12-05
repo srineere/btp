@@ -45,6 +45,10 @@ const studentSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    password: {
+      type: String,
+      required: true,
+    },
     registration_fees: {
       type: Number,
       required: true,
@@ -58,6 +62,17 @@ const studentSchema = mongoose.Schema(
     timestamps: true,
   }
 )
+studentSchema.methods.matchPassword = async function (enteredPassword) {
+  // console.log('bye,reached here')
+  // console.log(this.password, enteredPassword)
+  try {
+    return await bcrypt.compare(enteredPassword, this.password)
+  }
+  catch{
+    console.log("err")
+    return;
+  }
+}
 //the below is required code for converting the schema to the model
 //as per the documentation of mongoose
 //any name can be given as a constant in the place of the Student

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../actions/userActions'
+import { Redirect } from 'react-router-dom';
+import { login } from '../actions/studentLoginActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import './Login.css'
-const Login = ({ history, location }) => {
+const LoginAsStudent = ({ history, location }) => {
   console.log('value of history', history)
   console.log('value of location', location)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [toggle, setToggle] = useState(false)
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  const redirect = location.search ? location.search.split('=')[1] : '/Student'
   console.log('value of redirect is', redirect)
   const dispatch = useDispatch()
   const userLogin = useSelector((state) => state.userLogin)
@@ -27,22 +28,24 @@ const Login = ({ history, location }) => {
   const hideShow = () => {}
 
   useEffect(() => {
+    console.log('reditrectign')
     if (userCred) {
       console.log(userCred)
       // console.log('there is userCred')
       // console.log(userCred)
-      history.push(redirect)
     }
   }, [history, userCred, redirect])
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(login(email, password))
+    history.push('/Student')
+    // return <Redirect to='/Student' />
     // console.log('form submitted')
   }
   return (
     <div className='container'>
       <div className='layout'>
-        <h1>Sign In As Admin</h1>
+        <h1>Sign In As Student</h1>
         {error && <Message variant='danger ' message={error} />}
         {loading ? (
           <Loader />
@@ -86,7 +89,7 @@ const Login = ({ history, location }) => {
             <button className='btn' type='submit'>
               Login
             </button>
-            <div className='remember-me'> Login as <a style={{color:'white'}} href='/loginAsStudent'>Student</a>?</div>
+            <div className='remember-me'> Login as <a style={{color:'white'}} href='/login'>Admin</a>?</div>
             <div className='remember-me'> Login as <a style={{color:'white'}} href='/loginAsTeacher'>Teacher</a>?</div>
           </form>
         )}
@@ -97,4 +100,4 @@ const Login = ({ history, location }) => {
   )
 }
 
-export default Login
+export default LoginAsStudent

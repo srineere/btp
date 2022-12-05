@@ -3,6 +3,8 @@ import Landing from './screens/Landing'
 // import { Button } from 'react-bootstrap'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Login from './screens/Login'
+import LoginStudent from './screens/LoginAsStudent'
+import LoginTeacher from './screens/LoginAsTeacher'
 import StudentRegister from './screens/StudentRegister'
 import StudentFees from './screens/StudentFees'
 import StudentDetails from './screens/StudentDetails'
@@ -23,11 +25,18 @@ import AllStaffs from './screens/AllStaffs'
 import StaffRegister from './screens/StaffRegister'
 import IncomeScreen from './screens/IncomeScreen'
 import NotFound from './screens/NotFound'
-
+import Landing_Student from './screens/Landing_Student'
+import StudentDetailsDeep from './screens/StudentDetailsDeep'
+import StudentAcademicFees from './screens/StudentFeesPayment'
+import Paid from './screens/Paid'
+import PaidSalary from './screens/PaidSalary'
 import ExpenseScreen from './screens/ExpenseScreen'
 import underConstruction from './components/underConstruction'
 import { studentAttendances } from './actions/studentActions'
 import PrivateRoute from '../src/utils/PrivateRoute'
+import LandingTeacher from './screens/Landing_Teacher'
+import StudentEdit from './screens/StudentEdit'
+import TeacherEdit from './screens/TeacherEdit'
 // import ExpenseScreen from './screens/ExpenseScreen'
 
 const App = () => {
@@ -36,7 +45,23 @@ const App = () => {
       <div>
         <Switch>
           <PrivateRoute path='/' component={Landing} exact />
+          
           <Route path='/login' component={Login} exact />
+          
+          <Route path='/loginAsStudent' component={LoginStudent} exact />
+          <PrivateRoute path='/Student' component={Landing_Student} exact />
+          <PrivateRoute path='/Student/details' component={StudentDetailsDeep} exact/>
+          <PrivateRoute path='/Student/fees' component={StudentAcademicFees} exact/>
+          <PrivateRoute path='/Student/edit' component={StudentEdit} exact/>
+          <PrivateRoute path='/paid'component={Paid}/>
+
+          <Route path='/loginAsTeacher' component={LoginTeacher} exact />
+          <PrivateRoute path='/Teacher' component={LandingTeacher} exact/>
+          <PrivateRoute path='/Teacher/details' component={StudentDetailsDeep} exact/>
+          <PrivateRoute path='/Teacher/fees' component={TeacherSalary} exact/>
+          <PrivateRoute path='/Teacher/edit' component={TeacherEdit} exact/>
+          <PrivateRoute path='/paid'component={PaidSalary}/>
+          
           <PrivateRoute path='/student-register' component={StudentRegister} />
           <PrivateRoute path='/student-fee' component={StudentFees} />
           <PrivateRoute

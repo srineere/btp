@@ -10,6 +10,7 @@ export const userLoginReducer = (state = {}, action) => {
     case USER_LOGIN_REQUEST:
       return { loading: true }
     case USER_LOGIN_SUCCESS:
+      // console.log('swicth')
       //FOLLOWING USERINFO CONTAINS THE LOGGED IN USER'S CREDENTIALS
       return { loading: false, userCred: action.payload }
     case USER_LOGIN_FAIL:

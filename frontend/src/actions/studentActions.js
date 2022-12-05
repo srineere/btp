@@ -21,6 +21,7 @@ import {
   STUDENT_FEES_REQUEST,
   STUDENT_FEES_SUCCESS,
   STUDENT_FEES_FAIL,
+  STUDENT_EDIT_REQUEST
 } from '../constants/studentConstants'
 
 //the below uses function within a function which is privileged by redux-thunk
@@ -158,6 +159,73 @@ export const Register = (
     })
   }
 }
+
+// Edit student details
+export const Edit = (
+  student_name,
+  classname,
+  address,
+  parents_name,
+  contact_no,
+  gender,
+  age,
+  email,
+  password,
+  registration_fees,
+  image
+) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: STUDENT_EDIT_REQUEST,
+    })
+    //we need to send headers information so we declaring it inside the config
+    const {
+      userLogin: { userCred },
+    } = getState()
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userCred.token}`,
+      },
+    }
+    const { data } = await axios.post(
+      '/api/students/register',
+      {
+        student_name,
+        classname,
+
+        address,
+        parents_name,
+
+        contact_no,
+        gender,
+        age,
+        email,
+        registration_fees,
+        image,
+      },
+      config
+    )
+    dispatch({
+      type: STUDENT_REGISTER_SUCCESS,
+      payload: data,
+    })
+    //we are getting  the json data from our backend request so we need to convert it into the
+    //string before we save them in our local storage of our  browser
+  } catch (error) {
+    dispatch({
+      type: STUDENT_REGISTER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+
+
+
 
 //FOLLOWING IS FOR DELETING THE STUDENT
 

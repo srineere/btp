@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../actions/userActions'
+import { login } from '../actions/teacherLoginActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import './Login.css'
-const Login = ({ history, location }) => {
+const LoginAsTeacher = ({ history, location }) => {
   console.log('value of history', history)
   console.log('value of location', location)
   const [email, setEmail] = useState('')
@@ -37,12 +37,13 @@ const Login = ({ history, location }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(login(email, password))
+    history.push('/Teacher')
     // console.log('form submitted')
   }
   return (
     <div className='container'>
       <div className='layout'>
-        <h1>Sign In As Admin</h1>
+        <h1>Sign In As Teacher</h1>
         {error && <Message variant='danger ' message={error} />}
         {loading ? (
           <Loader />
@@ -86,8 +87,8 @@ const Login = ({ history, location }) => {
             <button className='btn' type='submit'>
               Login
             </button>
+            <div className='remember-me'> Login as <a style={{color:'white'}} href='/login'>Admin</a>?</div>
             <div className='remember-me'> Login as <a style={{color:'white'}} href='/loginAsStudent'>Student</a>?</div>
-            <div className='remember-me'> Login as <a style={{color:'white'}} href='/loginAsTeacher'>Teacher</a>?</div>
           </form>
         )}
 
@@ -97,4 +98,4 @@ const Login = ({ history, location }) => {
   )
 }
 
-export default Login
+export default LoginAsTeacher

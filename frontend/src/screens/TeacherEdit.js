@@ -6,13 +6,14 @@ import { teacherregister } from '../actions/teacherActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import './Student.css'
-const TeacherRegister = ({ history }) => {
+const TeacherEdit = ({ history }) => {
   const dispatch = useDispatch()
   const [uploading, setUploading] = useState(false)
   const [valid, setValid] = useState(false)
   const [time, setTime] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setpassword] = useState('')
   const [address, setAddress] = useState('')
   const [previous_school, setPrevious_school] = useState('')
 
@@ -102,7 +103,7 @@ const TeacherRegister = ({ history }) => {
         <Loader />
       ) : (
         <div className='outer-layout'>
-          <h1>Register Teacher</h1>
+          <h1>Edit Teacher Details</h1>
           {success && valid && (
             <Message
               style={{ marginBottom: '3px' }}
@@ -129,6 +130,15 @@ const TeacherRegister = ({ history }) => {
                   type='email'
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>{' '}
+              <div className='form-control'>
+                <label htmlFor='name'>Password</label>
+                <input
+                  type='text'
+                  value={password}
+                  onChange={(e) => setpassword(e.target.value)}
                   required
                 />
               </div>{' '}
@@ -237,7 +247,7 @@ const TeacherRegister = ({ history }) => {
             </div>
 
             <button className='btn-register' type='submit'>
-              Register Teacher
+              Edit Teacher
             </button>
           </form>
         </div>
@@ -246,4 +256,4 @@ const TeacherRegister = ({ history }) => {
   )
 }
 
-export default TeacherRegister
+export default TeacherEdit

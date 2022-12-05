@@ -6,8 +6,7 @@ import protect from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router.post(
-  '/',
+router.post(  '/',
   asyncHandler(async (req, res) => {
     // const students = await Student.find({})
     const { email, password } = req.body
@@ -30,8 +29,7 @@ router.post(
 
 //get logged in user's profile
 
-router.get(
-  '/user',
+router.get(  '/user',
   protect,
   asyncHandler(async (req, res) => {
     const user = await Admin.findById(req.user._id)

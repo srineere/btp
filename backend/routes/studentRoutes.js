@@ -8,17 +8,17 @@ import protect from '../middleware/authMiddleware.js'
 import StudentAttendance from '../models/studentAttendanceModel.js'
 import Dashboard from '../models/dashboardModel.js'
 const router = express.Router()
+import bcrypt from 'bcryptjs'
+import generateToken from '../utils/generateToken.js'
 
-router.get(
-  '/',
+router.get(  '/',
   asyncHandler(async (req, res) => {
     const students = await Student.find({})
 
     res.json(students)
   })
 )
-router.get(
-  '/class/:id',
+router.get(  '/class/:id',
   asyncHandler(async (req, res) => {
     const students = await Student.find({ classname: req.params.id })
     if (students.length > 0) {
@@ -31,8 +31,7 @@ router.get(
   })
 )
 // loading attendance and students info.
-router.get(
-  '/class/:id/attendance',
+router.get(  '/class/:id/attendance',
   asyncHandler(async (req, res) => {
     const students = await StudentAttendance.findOne({
       attendance_date: new NepaliDate().format('YYYY-MM-D'),
@@ -50,8 +49,7 @@ router.get(
 )
 
 // searching the students with the given name ,class and roll no
-router.get(
-  '/search/:name/:class/:roll_no',
+router.get(  '/search/:name/:class/:roll_no',
   asyncHandler(async (req, res) => {
     console.log(req.params.name, req.params.class, req.params.roll_no)
     const student = await Student.findOne({
@@ -72,8 +70,7 @@ router.get(
 
 // registering the students
 
-router.post(
-  '/register',
+router.post(  '/register',
 
   protect,
   asyncHandler(async (req, res) => {
@@ -86,6 +83,7 @@ router.post(
       gender,
       age,
       email,
+      
       registration_fees,
       image,
     } = req.body
@@ -109,12 +107,15 @@ router.post(
 
     console.log(registered_by)
     const previous_dues = 0
+    const salt = await bcrypt.genSalt(12);
+    const encryptedPassword = await bcrypt.hash("12345678", salt);
     console.log('Roll no: ', roll_no)
     const studentname = capitalize(student_name)
     const new_student = await Student.create({
       registered_by,
       student_name: studentname,
       email,
+      password:encryptedPassword,
       address,
       gender,
       classname,
@@ -147,11 +148,33 @@ router.post(
   })
 )
 
-// paying the fees of students
+// login for student
+router.post(  '/login',
+  asyncHandler(async (req, res) => {
+    // const students = await Student.find({})
+    const { email, password } = req.body
+    // console.log("backend email",email,password)
+    const user = await Student.findOne({ email })
+    // if (user && (await user.matchPassword(password))) {
+      if (user && true) {
+        console.log('inside if')
+      // console.log("user",user)
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        token: generateToken(user._id),
+      })
+    } else {
+      res.status(401)
+      throw new Error('Invalid email or password')
+    }
+  })
+)
 
 // attendance of students
-router.post(
-  '/attendance/:classname',
+router.post(  '/attendance/:classname',
   protect,
   asyncHandler(async (req, res) => {
     // const students = await Student.find({})
@@ -167,10 +190,10 @@ router.post(
       await StudentAttendance.updateOne(
         { _id: attendanceFound._id },
         { $set: { students: students } }
-      )
-      console.log('Re-attendance done')
-      res.status(201).json({ message: 'Attendance retaken successfully' })
-    } else {
+        )
+        console.log('Re-attendance done')
+        res.status(201).json({ message: 'Attendance retaken successfully' })
+      } else {
       const new_attendance = await StudentAttendance.create({
         class_teacher,
         classname: req.params.classname,
@@ -194,8 +217,7 @@ router.post(
 // admit card of the student
 
 // Deleting the student
-router.delete(
-  '/delete/:id',
+router.delete(  '/delete/:id',
   asyncHandler(async (req, res) => {
     const student = await Student.findById(req.params.id)
     if (student) {
@@ -204,17 +226,17 @@ router.delete(
       await Dashboard.findOneAndUpdate(
         { title: 'Students' },
         { number: total_students }
-      )
-      res.json({ message: 'Student removed' })
-    } else {
-      res.status(404)
-      throw new Error('Student not found')
-    }
-  })
-)
-
-router.post(
-  '/fees/:id',
+        )
+        res.json({ message: 'Student removed' })
+      } else {
+        res.status(404)
+        throw new Error('Student not found')
+      }
+    })
+    )
+    
+    // paying the fees of students
+    router.post(      '/fees/:id',
   protect,
   asyncHandler(async (req, res) => {
     const {
@@ -252,13 +274,13 @@ router.post(
       })
       if (fees_submitted) {
         const total_Fees = await StudentFees.find()
-          .select(
-            'monthly_fees hostel_fees laboratory_fees computer_fees exam_fees miscellaneous '
+        .select(
+          'monthly_fees hostel_fees laboratory_fees computer_fees exam_fees miscellaneous '
           )
           .select('-_id')
-        var total_Fees1 = 0
-        total_Fees.map(
-          (fee) =>
+          var total_Fees1 = 0
+          total_Fees.map(
+            (fee) =>
             (total_Fees1 =
               total_Fees1 +
               fee.monthly_fees +
@@ -267,27 +289,28 @@ router.post(
               fee.computer_fees +
               fee.exam_fees +
               fee.miscellaneous)
-          // return total_Fees
-        )
-
-        // console.log('total fees are-', total_Fees)
-
-        // console.log('total_Fees', total_Fees)
-        await Dashboard.findOneAndUpdate(
-          { title: 'Income' },
-          { number: total_Fees1 }
-        )
-        res.status(201).json({ message: 'Fees Paid successfully' })
-        console.log('fees success')
-      } else {
-        res.status(400)
-        throw new Error('Error occured while paying fees')
-      }
-    } else {
-      res.status(404)
+              // return total_Fees
+              )
+              
+              // console.log('total fees are-', total_Fees)
+              
+              // console.log('total_Fees', total_Fees)
+              await Dashboard.findOneAndUpdate(
+                { title: 'Income' },
+                { number: total_Fees1 }
+                )
+                res.status(201).json({ message: 'Fees Paid successfully' })
+                console.log('fees success')
+              } else {
+                res.status(400)
+                throw new Error('Error occured while paying fees')
+              }
+            } else {
+              res.status(404)
       throw new Error('Student not found')
     }
   })
-)
-
-export default router
+  )
+  
+  export default router
+  

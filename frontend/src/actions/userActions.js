@@ -22,6 +22,7 @@ export const login = (email, password) => async (dispatch) => {
       type: USER_LOGIN_SUCCESS,
       payload: data,
     })
+    console.log('this is sparta')
     //we are getting  the json data from our backend request so we need to convert it into the
     //string before we save them in our local storage of our  browser
     localStorage.setItem('userCred', JSON.stringify(data))

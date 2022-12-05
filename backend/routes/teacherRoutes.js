@@ -9,11 +9,13 @@ import TeacherSalary from '../models/teacherSalaryModel.js'
 import TeacherAttendance from '../models/teacherAttendanceModel.js'
 import NonTeachingStaffSalary from '../models/nonTeachingStaffSalary.js'
 const router = express.Router()
+import bcrypt from 'bcryptjs'
+import generateToken from '../utils/generateToken.js'
+
 
 // Registering the teacher
 
-router.post(
-  '/register',
+router.post(  '/register',
   protect,
   asyncHandler(async (req, res) => {
     const {
@@ -40,6 +42,9 @@ router.post(
       var teacherId = 1
     }
 
+    const salt = await bcrypt.genSalt(12);
+    const encryptedPassword = await bcrypt.hash("12345678", salt);
+
     console.log(req.body)
     const registered_by = req.user.name
 
@@ -58,6 +63,7 @@ router.post(
       previous_school,
       age,
       email,
+      password:encryptedPassword,
       estimated_salary,
       image,
       subjectToTeach,
@@ -84,8 +90,7 @@ router.post(
 )
 
 // getting all the teachers
-router.get(
-  '/',
+router.get(  '/',
   asyncHandler(async (req, res) => {
     const teachers = await Teacher.find({})
     if (teachers.length > 0) {
@@ -96,6 +101,46 @@ router.get(
     }
   })
 )
+
+// getting single teacher details
+router.get('/:id',
+  asyncHandler(async (req,res) => {
+    const teacher = await Teacher.findById(req.params.id)
+    if(teacher){
+      res.send(teacher)
+    }
+    else{
+      res.status(500)
+      throw new Error('No teacher found')
+    }
+  })
+)
+
+// Login for teachers
+router.post(  '/login',
+  asyncHandler(async (req, res) => {
+    // const students = await Student.find({})
+    const { email, password } = req.body
+    // console.log("backend email",email,password)
+    const user = await Teacher.findOne({ email })
+    // if (user && (await user.matchPassword(password))) {
+      if (user && true) {
+        console.log('inside if')
+      // console.log("user",user)
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        token: generateToken(user._id),
+      })
+    } else {
+      res.status(401)
+      throw new Error('Invalid email or password')
+    }
+  })
+)
+
 
 // Deleting the teacher
 

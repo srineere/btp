@@ -2,27 +2,25 @@ import axios from 'axios'
 
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { teacherregister } from '../actions/teacherActions'
+import { Register } from '../actions/studentActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import './Student.css'
-const TeacherRegister = ({ history }) => {
+const StudentEdit = ({ history }) => {
   const dispatch = useDispatch()
   const [uploading, setUploading] = useState(false)
   const [valid, setValid] = useState(false)
   const [time, setTime] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setpassword] = useState('')
   const [address, setAddress] = useState('')
-  const [previous_school, setPrevious_school] = useState('')
-
   const [gender, setGender] = useState('')
+  const [classname, setClassname] = useState('')
   const [phoneno, setPhoneno] = useState('')
-  const [subjectToTeach, setSubjectToTeach] = useState('')
-
-  const [qualification, setQualification] = useState('')
+  const [parentname, setParentname] = useState('')
   const [age, setAge] = useState('')
-  const [estimated_salary, setEstimated_salary] = useState('')
+  const [registrationfees, setRegistraionfees] = useState('')
   const [image, setImage] = useState('')
   const uploadFileHandler = async (e) => {
     const { data: CLOUDINARY_URL } = await axios.get('/api/config/cloudinary')
@@ -30,6 +28,7 @@ const TeacherRegister = ({ history }) => {
     const { data: CLOUDINARY_UPLOAD_PRESET } = await axios.get(
       '/api/config/cloudinarypreset'
     )
+   
     setTime(true)
     setTimeout(() => {
       setTime(false)
@@ -60,19 +59,17 @@ const TeacherRegister = ({ history }) => {
     e.preventDefault()
     setValid(true)
     dispatch(
-      teacherregister(
+      Register(
         name.trim(),
-        qualification,
-
+        classname,
         address,
+        parentname,
         phoneno,
         gender,
-        previous_school,
         age,
         email,
-        estimated_salary,
-        image,
-        subjectToTeach
+        registrationfees,
+        image
       )
     )
     setName('')
@@ -88,9 +85,9 @@ const TeacherRegister = ({ history }) => {
   const { userCred } = userLogin
 
   // const studentRegister = useSelector((state) => state.studentRegister)
-  const teacherRegister = useSelector((state) => state.teacherRegister)
+  const studentRegister = useSelector((state) => state.studentRegister)
 
-  const { loading, success, error } = teacherRegister
+  const { loading, success, error } = studentRegister
   useEffect(() => {
     if (!userCred) {
       history.push('/login')
@@ -102,16 +99,7 @@ const TeacherRegister = ({ history }) => {
         <Loader />
       ) : (
         <div className='outer-layout'>
-          <h1>Register Teacher</h1>
-          {success && valid && (
-            <Message
-              style={{ marginBottom: '3px' }}
-              variant='success'
-              message={success.message}
-            />
-          )}
-          {valid && error && <Message variant='danger' message={error} />}
-
+          <h1>Edit Student Details</h1>
           <form onSubmit={submitHandler}>
             <div className='form-inner'>
               <div className='form-control'>
@@ -133,29 +121,20 @@ const TeacherRegister = ({ history }) => {
                 />
               </div>{' '}
               <div className='form-control'>
+                <label htmlFor='name'>Password</label>
+                <input
+                  type='text'
+                  value={password}
+                  onChange={(e) => setpassword(e.target.value)}
+                  required
+                />
+              </div>{' '}
+              <div className='form-control'>
                 <label htmlFor='name'>Address</label>
                 <input
                   type='text'
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  required
-                />
-              </div>{' '}
-              <div className='form-control'>
-                <label htmlFor='name'>Previous School</label>
-                <input
-                  type='text'
-                  value={previous_school}
-                  onChange={(e) => setPrevious_school(e.target.value)}
-                  required
-                />
-              </div>{' '}
-              <div className='form-control'>
-                <label htmlFor='name'>Subject To Teach</label>
-                <input
-                  type='text'
-                  value={subjectToTeach}
-                  onChange={(e) => setSubjectToTeach(e.target.value)}
                   required
                 />
               </div>{' '}
@@ -175,6 +154,21 @@ const TeacherRegister = ({ history }) => {
                 </select>
               </div>{' '}
               <div className='form-control'>
+                <label htmlFor='name'>Class</label>
+                <select
+                  id='class'
+                  value={classname}
+                  onChange={(e) => setClassname(e.target.value)}
+                  required
+                >
+                  <option value=''>Select Class</option>
+                  <option value='UG1'>UG1</option>
+                  <option value='UG2'>UG2</option>
+                  <option value='UG3'>UG3</option>
+                  <option value='UG4'>UG4</option>
+                  </select>
+              </div>{' '}
+              <div className='form-control'>
                 <label htmlFor='name'>Phone Number</label>
                 <input
                   type='text'
@@ -184,11 +178,11 @@ const TeacherRegister = ({ history }) => {
                 />
               </div>{' '}
               <div className='form-control'>
-                <label htmlFor='name'>Qualification</label>
+                <label htmlFor='name'>Parent's Name</label>
                 <input
                   type='text'
-                  value={qualification}
-                  onChange={(e) => setQualification(e.target.value)}
+                  value={parentname}
+                  onChange={(e) => setParentname(e.target.value)}
                   required
                 />
               </div>
@@ -205,12 +199,13 @@ const TeacherRegister = ({ history }) => {
                   required
                 />
               </div>
+              {console.log('image url is', image)}
               <div className='form-control'>
-                <label htmlFor='registration-fees'>Salary </label>
+                <label htmlFor='registration-fees'>Registration Fees</label>
                 <input
                   type='number'
-                  value={estimated_salary}
-                  onChange={(e) => setEstimated_salary(e.target.value)}
+                  value={registrationfees}
+                  onChange={(e) => setRegistraionfees(e.target.value)}
                   required
                 />
               </div>
@@ -235,15 +230,23 @@ const TeacherRegister = ({ history }) => {
               {/* <div className="register-btn"> */}
               {/* </div> */}
             </div>
+            {success && valid && (
+              <Message
+                style={{ marginBottom: '3px' }}
+                variant='success'
+                message={success.message}
+              />
+            )}
 
             <button className='btn-register' type='submit'>
-              Register Teacher
+              Edit Student Details
             </button>
           </form>
+          {valid && error && <Message variant='danger' message={error} />}
         </div>
       )}
     </div>
   )
 }
 
-export default TeacherRegister
+export default StudentEdit

@@ -30,6 +30,7 @@ const adminSchema = new mongoose.Schema(
 )
 adminSchema.methods.matchPassword = async function (enteredPassword) {
   console.log('reached here')
+  console.log(this.password, enteredPassword)
   return await bcrypt.compare(enteredPassword, this.password)
 }
 const Admin = mongoose.model('Admin', adminSchema)

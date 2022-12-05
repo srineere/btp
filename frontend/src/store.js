@@ -4,6 +4,8 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { studentListReducer } from './reducers/studentReducers'
 import { userLoginReducer } from './reducers/userReducers'
+import { studentLoginReducer } from './reducers/studentLoginReducers'
+import { teacherLoginReducer } from './reducers/teacherLoginReducers'
 import {
   studentClassListReducer,
   studentSearchReducer,
@@ -47,6 +49,8 @@ const reducer = combineReducers({
   staffList: staffListReducer,
   allIncome: allIncomeReducer,
   allSalary: allSalaryReducer,
+  studentLogin: studentLoginReducer,
+  teacherLogin: teacherLoginReducer
 })
 const userInfoFromStorage = localStorage.getItem('userCred')
   ? JSON.parse(localStorage.getItem('userCred'))
