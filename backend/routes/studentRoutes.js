@@ -14,7 +14,6 @@ import generateToken from '../utils/generateToken.js'
 router.get(  '/',
   asyncHandler(async (req, res) => {
     const students = await Student.find({})
-
     res.json(students)
   })
 )

@@ -1,0 +1,434 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0", 
+    "title": "Go Green Project CRUD",
+    "description": "Go Green Project Application API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "paths": {
+    "/Dashboard": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "get the dashboard page",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/students/register":{
+      "post":{
+        "tags": ["students"],
+        "summary": "Register Student",
+        "requestBody": {
+          "description": "Student data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Student"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/students/":{
+      "get":{
+        "tags": ["students"],
+        "summary": "get all students",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/students/{class}/{id}":{
+      "get":{
+        "tags": ["students"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": " ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "class",
+            "in": "path",
+            "description": "Class",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "get the student details",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/students/login":{
+      "post":{
+        "tags": ["students"],
+        "summary": "Login a  Student",
+          "requestBody": {
+            "description": "Student data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Student"
+                }
+              }
+            },
+            "required": true
+          },
+          "required": true
+        
+      }
+    },
+    "/api/students/attendance/{class} ":{
+      "post":{
+        "tags": ["students"],
+        "summary": "Attendance of a Student",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "description": "Post ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+          "requestBody": {
+            "description": "Student data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Student"
+                }
+              }
+            },
+            "required": true
+          },
+          "required": true
+        
+      }
+    },
+    "/api/students/delete/{id}":{
+      "delete":{
+        "tags": ["students"],
+        "summary": "Delete Student",
+        "required": true,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "student ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/students/fees/{id} ":{
+      "post":{
+        "tags": ["students"],
+        "summary": "Fees of a Student",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Student ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+          "requestBody": {
+            "description": "Student data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Student"
+                }
+              }
+            },
+            "required": true
+          },
+          "required": true
+        
+      }
+    },
+    "/api/students/{class}/{id}/attendance":{
+      "get":{
+        "tags": ["students"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": " ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "class",
+            "in": "path",
+            "description": "Class",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "get the student details",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+
+    "/api/teachers/register":{
+      "post":{
+        "tags": ["teachers"],
+        "summary": "Register Teacher",
+        "requestBody": {
+          "description": "Teacher data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Teacher"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/api/teachers/":{
+      "get":{
+        "tags": ["teachers"],
+        "summary": "get all teachers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/teachers/{id}":{
+      "get":{
+        "tags": ["teachers"],
+        "summary": "Delete Teacher",
+        "required": true,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "teacher ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/teacher/login":{
+      "post":{
+        "tags": ["teachers"],
+        "summary": "Login a Teachers",
+          "requestBody": {
+            "description": "Teacher data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Teacher"
+                }
+              }
+            },
+            "required": true
+          },
+          "required": true
+        
+      }
+    },
+    "/api/teacher/delete/{id}":{
+      "delete":{
+        "tags": ["teachers"],
+        "summary": "Delete teacher",
+        "required": true,
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "teacher ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+
+    "api/login/":{
+      "post":{
+        "tags": ["admin"],
+        "summary": "Register Admin",
+        "requestBody": {
+          "description": "Admin data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admin"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "api/login/user":{
+      "get":{
+        "tags": ["admin"],
+        "summary": "Get Admin",
+        "requestBody": {
+          "description": "Admin data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admin"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    }
+
+  },
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Admin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Student": {
+        "type": "object",
+        "properties": {
+          "student_name": {
+            "type": "string"
+          },
+          "classname": {
+            "type": "string"
+          },
+          "roll_no":{
+            "type":"Number"
+          },
+          "address": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "parents_name": {
+            "type": "String",
+            "required": true
+          },
+          "contact_no": {
+            "type": "String",
+            "required": true
+          },
+          "gender": {
+            "type": "String",
+            "required": true
+          },
+          "previous_dues": {
+            "type": "Number"
+          },
+          "age": {
+            "type": "String",
+            "required": true
+          },
+          "email": {
+            "type": "String",
+            "required": true
+          },
+          "password": {
+            "type": "String",
+            "required": true
+          },
+          "registration_fees": {
+            "type": "Number",
+            "required": true
+          },
+          "image": {
+            "type": "String"
+          }
+        }
+      },
+      "Teacher": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "websiteUrl": {
+            "type": "string"
+          },
+          "repoUrl": {
+            "type": "string"
+          },
+          "techTags": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"]
+}

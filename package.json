@@ -6,12 +6,12 @@
   "type": "module",
   "scripts": {
     "start": "node backend/server",
-    "server": "nodemon backend/server",
+    "server": "nodemon --experimental-json-modules backend/server",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d"
-    },
+  },
   "repository": {
     "type": "git",
     "url": ""
@@ -25,7 +25,9 @@
     "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.4",
-    "nepali-date-converter": "^3.3.1"
+    "nepali-date-converter": "^3.3.1",
+    "swagger-jsdoc": "^6.2.5",
+    "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
     "concurrently": "^6.0.2",

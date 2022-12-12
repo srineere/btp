@@ -28,7 +28,7 @@ const Sidebar = ({ sidebarOpen, closeSidebar }) => {
         <div className='sidebar__link active_menu_link'>
           <i className='fa fa-home'></i>
           <Link className='linked' to='/Teacher'>
-            Dashboard
+            Teacher Dashboard
           </Link>
         </div>
         <h2>Students Section</h2>

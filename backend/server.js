@@ -15,6 +15,7 @@ import teacherRoutes from './routes/teacherRoutes.js'
 import staffRoutes from './routes/staffRoutes.js'
 import Admin from './models/adminModel.js'
 import bcrypt from 'bcryptjs'
+
 // const items = require('./data/Data')
 // const classes = require('./data/ClassData')
 // d0t
@@ -23,6 +24,33 @@ connectDB()
 const app = express()
 app.use(express.json())
 
+import swaggerUi from 'swagger-ui-express'
+// import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerDocument from './swagger.json'
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: "Library API",
+      version: '1.0.0',
+    },
+  },
+  apis: ["app.js"],
+};
+
+// const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+/**
+ * @swagger
+ * /books:
+ *   get:
+ *     description: Get all books
+ *     responses:
+ *       200:
+ *         description: Success
+ * 
+ */
 app.get('/dashboard', async (req, res) => {
   const items = await Dashboard.find()
   console.log(items)

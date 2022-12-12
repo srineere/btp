@@ -10,6 +10,8 @@ const Sidebar = ({ sidebarOpen, closeSidebar }) => {
     // console.log('hello')
     dispatch(logout())
   }
+
+  let email = JSON.parse(localStorage.getItem('userCred')).email
   return (
     <div className={sidebarOpen ? 'sidebar_responsive' : ''} id='sidebar'>
       <div className='sidebar__title'>
@@ -28,7 +30,7 @@ const Sidebar = ({ sidebarOpen, closeSidebar }) => {
         <div className='sidebar__link active_menu_link'>
           <i className='fa fa-home'></i>
           <Link className='linked' to='/Student'>
-            Dashboard
+            {email}
           </Link>
         </div>
         <h2>Students Section</h2>
